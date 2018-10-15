@@ -129,8 +129,6 @@ public class SandLab{
     }
 
     public void fallingOver(int particle, int randomRow, int randomCol) {
-        int colRight = randomCol + 1;
-        int colLeft = randomCol - 1;
         int getRandomDirection = IR4.getRandomNumber(-1, 1);
         
         if(grid[randomRow][randomCol] == particle) { 
@@ -145,32 +143,53 @@ public class SandLab{
             int currBtmRight = grid[randomRow + 1][randomCol + 1];
             int currBtmLeft = grid[randomRow+1][randomCol - 1];
             int currRandomBtmLeftOrRight = grid[randomRow + 1][randomCol + getRandomDirection];
+            
+            // Conditionals
+            boolean isCurrBelowSandOrGlass = (currBelow == SAND || currBelow == GLASS);
+            boolean isCurrBelowEmpty = (currBelow != METAL &&
+                                        currBelow != SAND  &&
+                                        currBelow != GEN   &&
+                                        currBelow != DESTRUCTOR &&
+                                        currBelow != GLASS);
 
-            if(currBelow != METAL && currBelow != SAND && currBelow != GEN && currBelow != DESTRUCTOR && currBelow != GLASS) {
+            boolean leftOrRight = (currRandomBtmLeftOrRight != METAL &&
+                                   currRandomBtmLeftOrRight != DESTRUCTOR  &&
+                                   currRandomBtmLeftOrRight != GEN &&
+                                   currRandomBtmLeftOrRight != SAND && 
+                                   currRandomBtmLeftOrRight != GLASS);
+            
+            boolean leftAndBtmLeft = ((currLeft == SAND || currLeft == GLASS) &&
+                                      currBtmRight != SAND && 
+                                      currBtmRight != GLASS && 
+                                      currBtmRight != METAL &&
+                                      currBtmRight != DESTRUCTOR && 
+                                      currBtmRight != GEN);
+            
+            boolean rightAndBtmRight = ((currRight == SAND || currRight == GLASS) &&
+                                        currBtmLeft != SAND   &&
+                                        currBtmLeft != GLASS  &&
+                                        currBtmLeft != METAL  &&
+                                        currBtmLeft != GEN    &&
+                                        currBtmLeft != DESTRUCTOR);
+
+            if(isCurrBelowEmpty) {
                 grid[randomRow][randomCol] = currBelow;
                 grid[randomRow+1][randomCol] = SAND;
-            } else {
-                if((currBelow == SAND || currBelow == GLASS) && currRandomBtmLeftOrRight != METAL &&
-                   currRandomBtmLeftOrRight != DESTRUCTOR    && currRandomBtmLeftOrRight != GEN &&
-                   currRandomBtmLeftOrRight != SAND && currRandomBtmLeftOrRight != GLASS ) {
+            } else if(isCurrBelowSandOrGlass) {
+                if(leftOrRight) {
                         grid[randomRow][randomCol] = currRandomBtmLeftOrRight;
                         grid[randomRow + 1][randomCol + getRandomDirection] = particle;
-                    } else if((currBelow == SAND || currBelow == GLASS) && 
-                          (currLeft == SAND || currLeft == GLASS) &&
-                          currBtmRight != SAND && currBtmRight != GLASS && currBtmRight != METAL &&
-                          currBtmRight != DESTRUCTOR && currBtmRight != GEN) {
+                    } else if(leftAndBtmLeft) {
                         grid[randomRow][randomCol] = currBtmRight;
                         grid[randomRow + 1][randomCol + 1] = particle;
-                    } else if((currBelow == SAND || currBelow == GLASS) &&
-                          (currRight == SAND || currRight == GLASS)     &&
-                          currBtmLeft != SAND  && currBtmLeft != GLASS  &&
-                          currBtmLeft != METAL  && currBtmLeft != GEN    &&
-                          currBtmLeft != DESTRUCTOR) {
+                    } else if(rightAndBtmRight) {
                         grid[randomRow][randomCol] = currBtmLeft;
                         grid[randomRow + 1][randomCol - 1] = particle;
                     } else {
-                    grid[randomRow][randomCol]= particle;
+                        grid[randomRow][randomCol]= particle;
                 }
+            } else {
+                grid[randomRow][randomCol]= particle;
             }
         }
     }
@@ -271,7 +290,9 @@ public class SandLab{
             
             
             int curr = grid[randomRow + randomRowDir][randomCol + randomColDir];
-            if(curr != METAL && curr != SAND && curr != OIL && curr != WATER && curr != GEN && curr != DESTRUCTOR && curr != GLASS) {
+            boolean isCurrBelowEmpty = (curr != METAL && curr != SAND && curr != OIL && curr != WATER && curr != GEN && curr != DESTRUCTOR && curr != GLASS);
+
+            if(isCurrBelowEmpty) {
                 grid[randomRow][randomCol] = curr;
                 grid[randomRow + randomRowDir][randomCol + randomColDir] = OIL;
             } else {
@@ -294,7 +315,9 @@ public class SandLab{
             if(randomCol + randomColDir < 0) randomCol = MAX_COLS - 1;
             
             int curr = grid[randomRow + randomRowDir][randomCol + randomColDir];
-            if(curr != METAL && curr != FIRE && curr != GEN && curr != DESTRUCTOR && curr != GLASS) {
+            boolean isBelowEmpty = (curr != METAL && curr != FIRE && curr != GEN && curr != DESTRUCTOR && curr != GLASS);
+
+            if(isCurrBelowEmpty) {
                 if(curr == OIL) {
                     grid[randomRow][randomCol] = FIRE;
                     grid[randomRow + randomRowDir][randomCol + randomColDir] = FIRE;

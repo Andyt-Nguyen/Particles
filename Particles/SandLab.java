@@ -21,9 +21,11 @@ public class SandLab{
     public static final int OIL = 5;
     public static final int GEN = 6;
     public static final int DESTRUCTOR = 7;
-    public static final int RESET = 8;
+    // public static final int RESET = 8;
+    public static final int FIRE = 8;
+    public static final int VAPE = 20;
+    public static final int GLASS = 21;
 
-    public static final int VAPE = 9;
     //do not add any more fields
     private int[][] grid;
     private LabDisplay display;
@@ -47,13 +49,13 @@ public class SandLab{
         names[SAND] = "Sand";
         names[WATER] = "Water";
         names[OIL] = "Oil";
+        names[FIRE] = "Fire";
         names[GEN] = "Generator";
         names[DESTRUCTOR] = "Destructor";
-        names[RESET] = "Reset";
-        
+       // names[RESET] = "Reset";
+
         display = new LabDisplay("SandLab", numRows, numCols, names);
         grid = new int[numRows][numCols];
-        
         
         if (FILE_NAME != "") {
             System.out.println("loading " + FILE_NAME);
@@ -63,12 +65,11 @@ public class SandLab{
     
     //called when the user clicks on a location using the given tool
     private void locationClicked(int row, int col, int tool){
-        
         grid[row][col] = tool;
-        if (tool == RESET)
-        {
-            grid = new int[MAX_ROWS][MAX_COLS];
-        }
+        //if (tool == RESET)
+        //{
+          //  grid = new int[MAX_ROWS][MAX_COLS];
+        //}
         if (tool == SAVEFILE) {
             SandLabFiles.writeFile(grid, NEW_FILE_NAME);  //uncomment this later to save your file...
         }
@@ -76,8 +77,6 @@ public class SandLab{
     
     //copies each element of grid into the display
     public void updateDisplay(){
-        
-
         for(int i = 0; i < grid.length; i++) {
             for(int j = 0; j < grid[i].length; j++) {
                 if(grid[i][j] == METAL) {
@@ -91,11 +90,15 @@ public class SandLab{
                 } else if(grid[i][j] == EMPTY) {
                     display.setColor(i,j,Color.black);
                 } else if(grid[i][j] == GEN) {
-                    display.setColor(i,j,Color.red);
+                    display.setColor(i,j, Color.magenta);
                 } else if(grid[i][j] == DESTRUCTOR) {
-                    display.setColor(i, j, Color.cyan);
+                    display.setColor(i,j,Color.cyan);
                 } else if(grid[i][j] == VAPE) {
-                    display.setColor(i, j, Color.pink);
+                    display.setColor(i,j, Color.pink);
+                } else if(grid[i][j] == FIRE) {
+                    display.setColor(i,j,Color.red);
+                } else if(grid[i][j] == GLASS) {
+                    display.setColor(i,j,Color.white);
                 }
             }
         }
@@ -103,28 +106,35 @@ public class SandLab{
     
     //called repeatedly.
     //causes one random particle to maybe do something.
-    
-    public void step(){
-
+    public void step() {
         int randomRow = IR4.getRandomNumber(0, MAX_ROWS -1);
         int randomCol = IR4.getRandomNumber(0, MAX_COLS -1);
         int getRandomDirection = IR4.getRandomNumber(-1, 1);
-        // runSand(randomRow, randomCol);
         runSand(randomRow, randomCol);
+        runGlass(randomRow, randomCol);
         runWater(randomRow, randomCol, getRandomDirection);
         runOil(randomRow, randomCol, getRandomDirection);
         runGenerator(randomRow, randomCol);
         runDestructor(randomRow, randomCol);
-        runVape(randomRow, randomCol, getRandomDirection);        
+        runVape(randomRow, randomCol, getRandomDirection);
+        runFire(randomRow, randomCol, getRandomDirection);      
     }
 
     
     public void runSand(int randomRow, int randomCol) {
+      fallingOver(SAND, randomRow, randomCol);
+    }
+    public void runGlass(int randomRow, int randomCol) {
+        fallingOver(GLASS, randomRow, randomCol);
+    }
+
+    public void fallingOver(int particle, int randomRow, int randomCol) {
         int colRight = randomCol + 1;
         int colLeft = randomCol - 1;
         int getRandomDirection = IR4.getRandomNumber(-1, 1);
         
-        if(grid[randomRow][randomCol] == SAND) { grid[randomRow][randomCol] = EMPTY;
+        if(grid[randomRow][randomCol] == particle) { 
+            grid[randomRow][randomCol] = EMPTY;
             randomRow = randomRow + 1 > MAX_ROWS - 1 ? 0 : randomRow;
             randomCol = randomCol + 1 > MAX_COLS - 1 ?  1 : randomCol;
             randomCol = randomCol - 1 < 0 ? MAX_COLS - 2 : randomCol;
@@ -136,43 +146,38 @@ public class SandLab{
             int currBtmLeft = grid[randomRow+1][randomCol - 1];
             int currRandomBtmLeftOrRight = grid[randomRow + 1][randomCol + getRandomDirection];
 
-            // if (randomRow == 0 && grid[0][randomCol] == METAL)
-            // {
-            //     System.out.println("hit");
-            //     currBelow = METAL;
-            // }
-
-            
-
-            if(currBelow != METAL && currBelow != SAND && currBelow != GEN && currBelow != DESTRUCTOR) {
+            if(currBelow != METAL && currBelow != SAND && currBelow != GEN && currBelow != DESTRUCTOR && currBelow != GLASS) {
                 grid[randomRow][randomCol] = currBelow;
                 grid[randomRow+1][randomCol] = SAND;
             } else {
-                if(currBelow == SAND && currRandomBtmLeftOrRight != METAL &&
+                if((currBelow == SAND || currBelow == GLASS) && 
+                   currRandomBtmLeftOrRight != METAL &&
                    currRandomBtmLeftOrRight != DESTRUCTOR &&
                    currRandomBtmLeftOrRight != GEN &&
-                   currRandomBtmLeftOrRight != SAND ) 
-                   {
+                   currRandomBtmLeftOrRight != SAND &&
+                   currRandomBtmLeftOrRight != GLASS ) {
                     grid[randomRow][randomCol] = currRandomBtmLeftOrRight;
-                        grid[randomRow + 1][randomCol + getRandomDirection] = SAND;
-                    } 
-                else if(currBelow == SAND && currLeft == SAND &&
+                        grid[randomRow + 1][randomCol + getRandomDirection] = particle;
+                    } else if((currBelow == SAND || currBelow == GLASS) && 
+                          (currLeft == SAND || currLeft == GLASS) &&
                           currBtmRight != SAND &&
+                          currBtmRight != GLASS &&
                           currBtmRight != METAL &&
                           currBtmRight != DESTRUCTOR &&
                           currBtmRight != GEN) {
                     grid[randomRow][randomCol] = currBtmRight;
-                    grid[randomRow + 1][randomCol + 1] = SAND;
-                } else if(currBelow == SAND &&
-                          currRight == SAND &&
-                          currBtmLeft != SAND &&
-                          currBtmLeft != METAL &&
-                          currBtmLeft != GEN &&
+                    grid[randomRow + 1][randomCol + 1] = particle;
+                    } else if((currBelow == SAND || currBelow == GLASS) &&
+                          (currRight == SAND || currRight == GLASS)     &&
+                          currBtmLeft != SAND   &&
+                          currBtmLeft != GLASS  &&
+                          currBtmLeft != METAL  &&
+                          currBtmLeft != GEN    &&
                           currBtmLeft != DESTRUCTOR) {
                     grid[randomRow][randomCol] = currBtmLeft;
-                    grid[randomRow+1][randomCol - 1] = SAND;
-                } else {
-                    grid[randomRow][randomCol]= SAND;
+                    grid[randomRow + 1][randomCol - 1] = particle;
+                    } else {
+                    grid[randomRow][randomCol]= particle;
                 }
             }
         }
@@ -196,7 +201,7 @@ public class SandLab{
             
             
             int curr = grid[randomRow + randomRowDir][randomCol + randomColDir];
-            if(curr != METAL && curr != SAND && curr != WATER && curr != GEN && curr != DESTRUCTOR) {
+            if(curr != METAL && curr != SAND && curr != WATER && curr != GEN && curr != DESTRUCTOR && curr != GLASS) {
                 grid[randomRow][randomCol] = curr;
                 grid[randomRow + randomRowDir][randomCol + randomColDir] = WATER;
             } else {
@@ -218,6 +223,7 @@ public class SandLab{
         }
     }
 
+
     public void runVape(int randomRow, int randomCol, int getRandomDirection)
     {
         if (grid[randomRow][randomCol] == VAPE) {
@@ -225,7 +231,6 @@ public class SandLab{
             int randomColDir = getRandomDirection != 0 ? getRandomDirection : 0;
             int row = randomRow + randomRowDir;
             int col = randomCol + randomColDir;
-           // int deleteVape = getRandomNumber(0,1) < 2 ? : 
             if (getRandomNumber(0,100) == 69)
             {
                 grid[randomRow][randomCol] = EMPTY;
@@ -233,17 +238,6 @@ public class SandLab{
             }
             
             grid[randomRow][randomCol] = EMPTY;
-            // if(randomRow - randomRowDir < 0) {
-            //     grid[randomRow][randomCol] = EMPTY;
-            //     randomRow = MAX_ROWS - 1;
-            // }
-            // if(randomCol >= MAX_COLS - 1) {
-            //     randomCol = 0;
-            // }
-            // if (randomCol <= 0)
-            // {
-            //     randomCol = MAX_COLS - 1;
-            // }
             if(randomRow - randomRowDir < 0) randomRow = MAX_ROWS - 1;
             if(randomRow - randomRowDir > MAX_ROWS - 1) randomRow = 0;
             if(randomCol - randomColDir > MAX_COLS - 1) randomCol = 0;
@@ -288,13 +282,51 @@ public class SandLab{
             
             
             int curr = grid[randomRow + randomRowDir][randomCol + randomColDir];
-            if(curr != METAL && curr != SAND && curr != OIL && curr != WATER && curr != GEN && curr != DESTRUCTOR) {
+            if(curr != METAL && curr != SAND && curr != OIL && curr != WATER && curr != GEN && curr != DESTRUCTOR && curr != GLASS) {
                 grid[randomRow][randomCol] = curr;
                 grid[randomRow + randomRowDir][randomCol + randomColDir] = OIL;
             } else {
                 grid[randomRow][randomCol] = OIL;
             }
         }
+    }
+
+
+    public void runFire(int randomRow, int randomCol, int getRandomDirection) {
+        if(grid[randomRow][randomCol] == FIRE) {
+            int randomRowDir = getRandomDirection == 0 ? 1 : 0;
+            int randomColDir = getRandomDirection != 0 ? getRandomDirection : 0;
+            int row = randomRow + randomRowDir;
+            int col = randomCol + randomColDir;
+            
+            grid[randomRow][randomCol] = EMPTY;
+            if(randomRow + randomRowDir > MAX_ROWS - 1) randomRow = 0;
+            if(randomCol + randomColDir > MAX_COLS - 1) randomCol = 0;
+            if(randomCol + randomColDir < 0) randomCol = MAX_COLS - 1;
+            /**
+             * Create conditional for SAND
+             */
+            
+            int curr = grid[randomRow + randomRowDir][randomCol + randomColDir];
+            if(curr != METAL && curr != FIRE && curr != GEN && curr != DESTRUCTOR && curr != GLASS) {
+                if(curr == OIL) {
+                    grid[randomRow][randomCol] = FIRE;
+                    grid[randomRow + randomRowDir][randomCol + randomColDir] = FIRE;
+                } else if(curr == WATER) {
+                    grid[randomRow][randomCol] = VAPE;
+                    grid[randomRow + randomRowDir][randomCol + randomColDir] = VAPE;
+                } else if(curr == SAND) {
+                    // grid[randomRow][randomCol] = GLASS;
+                    grid[randomRow + randomRowDir][randomCol + randomColDir] = GLASS;
+                } else {
+                    grid[randomRow][randomCol] = curr;
+                    grid[randomRow + randomRowDir][randomCol + randomColDir] = FIRE;
+                }
+            } else {
+                grid[randomRow][randomCol] = FIRE;
+            }
+        }
+        
     }
     
     

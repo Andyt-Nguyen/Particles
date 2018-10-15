@@ -212,7 +212,8 @@ public class SandLab{
             
             
             int curr = grid[randomRow + randomRowDir][randomCol + randomColDir];
-            if(curr != METAL && curr != SAND && curr != WATER && curr != GEN && curr != DESTRUCTOR && curr != GLASS) {
+            boolean isCurrBelowEmpty = (curr != METAL && curr != SAND && curr != WATER && curr != GEN && curr != DESTRUCTOR && curr != GLASS);
+            if(isCurrBelowEmpty) {
                 grid[randomRow][randomCol] = curr;
                 grid[randomRow + randomRowDir][randomCol + randomColDir] = WATER;
             } else {
@@ -315,7 +316,7 @@ public class SandLab{
             if(randomCol + randomColDir < 0) randomCol = MAX_COLS - 1;
             
             int curr = grid[randomRow + randomRowDir][randomCol + randomColDir];
-            boolean isBelowEmpty = (curr != METAL && curr != FIRE && curr != GEN && curr != DESTRUCTOR && curr != GLASS);
+            boolean isCurrBelowEmpty = (curr != METAL && curr != FIRE && curr != GEN && curr != DESTRUCTOR && curr != GLASS);
 
             if(isCurrBelowEmpty) {
                 if(curr == OIL) {

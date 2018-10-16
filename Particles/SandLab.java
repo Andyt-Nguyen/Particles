@@ -202,9 +202,7 @@ public class SandLab{
         if(grid[randomRow][randomCol] == WATER) {
             int randomRowDir = getRandomDirection == 0 ? 1 : 0;
             int randomColDir = getRandomDirection != 0 ? getRandomDirection : 0;
-            int row = randomRow + randomRowDir;
-            int col = randomCol + randomColDir;
-            
+        
             grid[randomRow][randomCol] = EMPTY;
             if(randomRow + randomRowDir > MAX_ROWS - 1) randomRow = 0;
             if(randomCol + randomColDir > MAX_COLS - 1) randomCol = 0;
@@ -212,7 +210,12 @@ public class SandLab{
             
             
             int curr = grid[randomRow + randomRowDir][randomCol + randomColDir];
-            boolean isCurrBelowEmpty = (curr != METAL && curr != SAND && curr != WATER && curr != GEN && curr != DESTRUCTOR && curr != GLASS);
+            boolean isCurrBelowEmpty = (curr != METAL && 
+                                        curr != SAND && 
+                                        curr != WATER && 
+                                        curr != GEN && 
+                                        curr != DESTRUCTOR && 
+                                        curr != GLASS);
             if(isCurrBelowEmpty) {
                 grid[randomRow][randomCol] = curr;
                 grid[randomRow + randomRowDir][randomCol + randomColDir] = WATER;
@@ -224,7 +227,10 @@ public class SandLab{
     
     public void runGenerator(int randomRow, int randomCol) {
         int i = 1;
-        boolean overBoundary = (randomCol == 0 || randomRow == 0 || randomCol == MAX_COLS - 1 || randomRow == MAX_ROWS - 1);
+        boolean overBoundary = (randomCol == 0 || 
+                                randomRow == 0 || 
+                                randomCol == MAX_COLS - 1 || 
+                                randomRow == MAX_ROWS - 1);
         if(overBoundary) return ;
         while (grid[randomRow + i][randomCol] == GEN) 
             i++;
@@ -240,8 +246,7 @@ public class SandLab{
         if (grid[randomRow][randomCol] == VAPE) {
             int randomRowDir = getRandomDirection == 0 ? 1 : 0;
             int randomColDir = getRandomDirection != 0 ? getRandomDirection : 0;
-            int row = randomRow + randomRowDir;
-            int col = randomCol + randomColDir;
+        
             if (getRandomNumber(0,100) == 69) {
                 grid[randomRow][randomCol] = EMPTY;
                 return ;
@@ -281,8 +286,6 @@ public class SandLab{
         if(grid[randomRow][randomCol] == OIL) {
             int randomRowDir = getRandomDirection == 0 ? 1 : 0;
             int randomColDir = getRandomDirection != 0 ? getRandomDirection : 0;
-            int row = randomRow + randomRowDir;
-            int col = randomCol + randomColDir;
             
             grid[randomRow][randomCol] = EMPTY;
             if(randomRow + randomRowDir > MAX_ROWS - 1) randomRow = 0;
@@ -291,7 +294,13 @@ public class SandLab{
             
             
             int curr = grid[randomRow + randomRowDir][randomCol + randomColDir];
-            boolean isCurrBelowEmpty = (curr != METAL && curr != SAND && curr != OIL && curr != WATER && curr != GEN && curr != DESTRUCTOR && curr != GLASS);
+            boolean isCurrBelowEmpty = (curr != METAL && 
+                                        curr != SAND && 
+                                        curr != OIL && 
+                                        curr != WATER && 
+                                        curr != GEN && 
+                                        curr != DESTRUCTOR && 
+                                        curr != GLASS);
 
             if(isCurrBelowEmpty) {
                 grid[randomRow][randomCol] = curr;
@@ -307,8 +316,6 @@ public class SandLab{
         if(grid[randomRow][randomCol] == FIRE) {
             int randomRowDir = getRandomDirection == 0 ? 1 : 0;
             int randomColDir = getRandomDirection != 0 ? getRandomDirection : 0;
-            int row = randomRow + randomRowDir;
-            int col = randomCol + randomColDir;
             
             grid[randomRow][randomCol] = EMPTY;
             if(randomRow + randomRowDir > MAX_ROWS - 1) randomRow = 0;
@@ -316,7 +323,10 @@ public class SandLab{
             if(randomCol + randomColDir < 0) randomCol = MAX_COLS - 1;
             
             int curr = grid[randomRow + randomRowDir][randomCol + randomColDir];
-            boolean isCurrBelowEmpty = (curr != METAL && curr != FIRE && curr != GEN && curr != DESTRUCTOR && curr != GLASS);
+            boolean isCurrBelowEmpty = (curr != METAL && 
+                                        curr != FIRE && 
+                                        curr != GEN && curr != DESTRUCTOR && 
+                                        curr != GLASS);
 
             if(isCurrBelowEmpty) {
                 if(curr == OIL) {

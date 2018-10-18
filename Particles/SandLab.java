@@ -142,7 +142,9 @@ public class SandLab{
                         if(randomCol + getRandomDirection < 0) {
                             randomCol = MAX_COLS - 1;
                         }
-                        if(grid[randomRow][randomCol] != METAL) {
+                        if(grid[randomRow][randomCol] != METAL &&
+                        grid[randomRow][randomCol] != DESTRUCTOR &&
+                        grid[randomRow][randomCol] != GEN) {
 
                         
                         if(grid[randomRow + 1][randomCol + getRandomDirection] != METAL && 
@@ -160,7 +162,9 @@ public class SandLab{
                         if(randomCol + getRandomDirection > MAX_COLS - 1) {
                             randomCol = 0;
                         }
-                        if(grid[randomRow][randomCol] != METAL) {
+                        if(grid[randomRow][randomCol] != METAL &&
+                        grid[randomRow][randomCol] != DESTRUCTOR &&
+                        grid[randomRow][randomCol] != GEN) {
                             if(grid[randomRow + 1][randomCol + getRandomDirection] != METAL && 
                             grid[randomRow + 1][randomCol + getRandomDirection] != SAND &&
                             grid[randomRow + 1][randomCol + getRandomDirection] != GLASS &&
@@ -467,7 +471,9 @@ public class SandLab{
                                         curr != GEN && curr != DESTRUCTOR && 
                                         curr != GLASS);
 
-            if(grid[randomRow][randomCol] != METAL) {
+            if(grid[randomRow][randomCol] != METAL &&
+            grid[randomRow][randomCol] != DESTRUCTOR &&
+            grid[randomRow][randomCol] != GEN) {
                 if(isCurrBelowEmpty) {
                     if(curr == OIL) {
                         grid[randomRow][randomCol] = FIRE;

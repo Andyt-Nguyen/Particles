@@ -151,7 +151,7 @@ public class SandLab{
                         grid[randomRow + 1][randomCol + getRandomDirection] != GEN &&
                         grid[randomRow + 1][randomCol + getRandomDirection] != DESTRUCTOR) {
                                 grid[randomRow][randomCol] = grid[randomRow + 1][randomCol + getRandomDirection];
-                                grid[randomRow][randomCol + getRandomDirection] = particle; 
+                                grid[randomRow + 1][randomCol + getRandomDirection] = particle; 
                         } else {
                             grid[randomRow][randomCol] = particle;
                         }
@@ -167,7 +167,7 @@ public class SandLab{
                             grid[randomRow + 1][randomCol + getRandomDirection] != GEN &&
                             grid[randomRow + 1][randomCol + getRandomDirection] != DESTRUCTOR) {
                                 grid[randomRow][randomCol] = grid[randomRow + 1][randomCol + getRandomDirection];
-                                grid[randomRow][randomCol + getRandomDirection] = particle; 
+                                grid[randomRow + 1][randomCol + getRandomDirection] = particle; 
                             } else {
                                 grid[randomRow][randomCol] = particle;
                             }

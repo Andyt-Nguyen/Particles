@@ -184,6 +184,7 @@ public class SandLab{
 
 
                 } else {
+                    grid[randomRow][randomCol] = grid[randomRow+1][randomCol];
                     grid[randomRow + 1][randomCol] = particle;
                 }
 
@@ -421,8 +422,8 @@ public class SandLab{
                                         curr != DESTRUCTOR && 
                                         curr != GLASS);
             if(grid[randomRow][randomCol] != METAL &&
-            grid[randomRow][randomCol] != GEN &&
-            grid[randomRow][randomCol] != DESTRUCTOR) {
+               grid[randomRow][randomCol] != GEN &&
+               grid[randomRow][randomCol] != DESTRUCTOR) {
                 if(isCurrBelowEmpty) {
                     grid[randomRow][randomCol] = curr;
                     grid[randomRow + randomRowDir][randomCol + randomColDir] = OIL;
@@ -444,6 +445,8 @@ public class SandLab{
             }
         }
     }
+
+    
 
 
     public void runFire(int randomRow, int randomCol, int getRandomDirection) {

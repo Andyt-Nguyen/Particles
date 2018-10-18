@@ -357,8 +357,14 @@ public class SandLab{
         while (grid[randomRow + i][randomCol] == GEN) 
             i++;
         if (grid[randomRow][randomCol] == GEN) {
-            if (grid[randomRow - i][randomCol] != EMPTY && grid[randomRow - i][randomCol] != GEN) {
-                grid[randomRow + i][randomCol] = grid[randomRow - i][randomCol];
+
+            if(grid[0][randomCol] == GEN && grid[MAX_ROWS - 1][randomCol] != EMPTY) {
+                    grid[randomRow + i][randomCol] = grid[MAX_ROWS -1][randomCol];
+            } else {
+                if (grid[randomRow - i][randomCol] != EMPTY && grid[randomRow - i][randomCol] != GEN) {
+                    grid[randomRow + i][randomCol] = grid[randomRow - i][randomCol];
+                }
+
             }
         }
     }
@@ -395,11 +401,17 @@ public class SandLab{
 
     public void runDestructor(int randomRow, int randomCol) {
         if (grid[randomRow][randomCol] == DESTRUCTOR) {
-            if(grid[randomRow - 1][randomCol] != DESTRUCTOR) {
-                if (grid[randomRow - 1][randomCol] != EMPTY) {
-                    grid[randomRow - 1][randomCol] = VAPE;                
+            if(randomRow - 1 < 0) {
+                if(grid[0][randomCol] == DESTRUCTOR && grid[MAX_ROWS - 1][randomCol] != EMPTY) {
+                grid[MAX_ROWS - 1][randomCol] = VAPE; 
+            }
+        }else {
+                if(grid[randomRow - 1][randomCol] != DESTRUCTOR) {
+                    if (grid[randomRow - 1][randomCol] != EMPTY) {
+                        grid[randomRow - 1][randomCol] = VAPE;                
+                    }
                 }
-             }
+            }
         }
     }
     

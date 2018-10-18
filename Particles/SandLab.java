@@ -218,22 +218,17 @@ public class SandLab{
     
     // This function runs the and functionality where the user can draw water
     public void runWater(int randomRow, int randomCol, int getRandomDirection) {
-        int my_max_row = MAX_ROWS - 1;
-        int my_max_col = MAX_COLS - 1;
+        // int MAX_ROWS = 180;
+        // int MAX_COLS = 150;
         // WATER TOOL
         if(grid[randomRow][randomCol] == WATER) {
             int randomRowDir = getRandomDirection == 0 ? 1 : 0;
             int randomColDir = getRandomDirection != 0 ? getRandomDirection : 0;
         
             grid[randomRow][randomCol] = EMPTY;
-            // if(randomRow + randomRowDir > my_max_row - 1) randomRow = 0;
-            randomRow = randomRow + randomRowDir > my_max_row - 1 ? 0 : randomRow;
-            if(randomCol + randomColDir > my_max_col - 1) randomCol = 0;
-            if(randomCol + randomColDir < 0) randomCol = my_max_col - 1;
-
-            // randomCol = randomCol + 1 > MAX_COLS - 1 ?  1 : randomCol;
-            // randomCol = randomCol - 1 < 0 ? MAX_COLS - 2 : randomCol;
-
+            randomRow = randomRow + randomRowDir > MAX_ROWS - 1 ? 0 : randomRow;
+            if(randomCol + randomColDir > MAX_COLS - 1) randomCol = 0;
+            if(randomCol + randomColDir < 0) randomCol = MAX_COLS - 1;
             
             
             int curr = grid[randomRow + randomRowDir][randomCol + randomColDir];
@@ -252,13 +247,13 @@ public class SandLab{
                 }
             } else {
                 if(randomCol == 0) {
-                    randomCol = my_max_col -1;
-                } else if(randomCol == my_max_col -1) {
+                    randomCol = MAX_COLS -1;
+                } else if(randomCol == MAX_COLS -1) {
                     randomCol = 0;
                 }
 
                 if(randomRow == 0) {
-                    randomRow = my_max_row - 1;
+                    randomRow = MAX_ROWS - 1;
                 }
                 grid[randomRow][randomCol] = WATER;
 
@@ -288,7 +283,7 @@ public class SandLab{
             int randomRowDir = getRandomDirection == 0 ? 1 : 0;
             int randomColDir = getRandomDirection != 0 ? getRandomDirection : 0;
         
-            if (getRandomNumber(0,100) == 50) {
+            if (getRandomNumber(0,100) == 69) {
                 grid[randomRow][randomCol] = EMPTY;
                 return ;
             }
@@ -324,16 +319,16 @@ public class SandLab{
     
     // This function runs the and functionality where the user can draw oil
     public void runOil(int randomRow, int randomCol, int getRandomDirection) {
-        int my_max_col = MAX_ROWS - 1;
-        int my_max_row = MAX_COLS - 1;
+        // int MAX_ROWS = 180;
+        // int MAX_COLS = 150;
         if(grid[randomRow][randomCol] == OIL) {
             int randomRowDir = getRandomDirection == 0 ? 1 : 0;
             int randomColDir = getRandomDirection != 0 ? getRandomDirection : 0;
             
             grid[randomRow][randomCol] = EMPTY;
-            if(randomRow + randomRowDir > my_max_row - 1) randomRow = 0;
-            if(randomCol + randomColDir > my_max_col - 1) randomCol = 0;
-            if(randomCol + randomColDir < 0) randomCol = my_max_col - 1;
+            if(randomRow + randomRowDir > MAX_ROWS - 1) randomRow = 0;
+            if(randomCol + randomColDir > MAX_COLS - 1) randomCol = 0;
+            if(randomCol + randomColDir < 0) randomCol = MAX_COLS - 1;
             
             
             int curr = grid[randomRow + randomRowDir][randomCol + randomColDir];
@@ -353,13 +348,13 @@ public class SandLab{
                 }
             } else {
                 if(randomCol == 0) {
-                    randomCol = my_max_col -1;
-                } else if(randomCol == my_max_col -1) {
+                    randomCol = MAX_COLS -1;
+                } else if(randomCol == MAX_COLS -1) {
                     randomCol = 0;
                 }
                 
                 if(randomRow == 0) {
-                    randomRow = my_max_row - 1;
+                    randomRow = MAX_ROWS - 1;
                 }
                 grid[randomRow][randomCol] = OIL;
 
@@ -369,14 +364,14 @@ public class SandLab{
 
 
     public void runFire(int randomRow, int randomCol, int getRandomDirection) {
-        int my_max_row = MAX_ROWS - 1;
-        int my_max_col = MAX_COLS - 1;
+        // int MAX_ROWS = 180;
+        // int MAX_COLS = 150;
         if(grid[randomRow][randomCol] == FIRE) {
             int randomRowDir = getRandomDirection == 0 ? 1 : 0;
             int randomColDir = getRandomDirection != 0 ? getRandomDirection : 0;
             
             grid[randomRow][randomCol] = EMPTY;
-            if(randomRow + randomRowDir > my_max_row - 1) randomRow = 0;
+            if(randomRow + randomRowDir > MAX_ROWS - 1) randomRow = 0;
             if(randomCol + randomColDir > MAX_COLS - 1) randomCol = 0;
             if(randomCol + randomColDir < 0) randomCol = MAX_COLS - 1;
             
@@ -405,13 +400,13 @@ public class SandLab{
                 }
             }else {
                 if(randomCol == 0) {
-                    randomCol = my_max_col -1;
-                } else if(randomCol == my_max_col -1) {
+                    randomCol = MAX_COLS -1;
+                } else if(randomCol == MAX_COLS -1) {
                     randomCol = 0;
                 }
                 
                 if(randomRow == 0) {
-                    randomRow = my_max_row - 1;
+                    randomRow = MAX_ROWS - 1;
                 }
                 grid[randomRow][randomCol] = FIRE;
 

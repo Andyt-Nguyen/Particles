@@ -21,7 +21,7 @@ public class SandLab{
     public static final int OIL = 5;
     public static final int GEN = 6;
     public static final int DESTRUCTOR = 7;
-    public static final int RESET = 8;
+    public static final int RESET = 9;
     public static final int FIRE = 8;
     public static final int VAPE = 20;
     public static final int GLASS = 21;
@@ -41,7 +41,7 @@ public class SandLab{
     
     //SandLab constructor
     public SandLab(int numRows, int numCols){
-        String[] names = new String[9];
+        String[] names = new String[10];
         
         names[EMPTY] = "Empty";
         names[METAL] = "Metal";
@@ -52,7 +52,7 @@ public class SandLab{
         names[FIRE] = "Fire";
         names[GEN] = "Generator";
         names[DESTRUCTOR] = "Destructor";
-       // names[RESET] = "Reset";
+        names[RESET] = "Reset";
 
         display = new LabDisplay("SandLab", numRows, numCols, names);
         grid = new int[numRows][numCols];
@@ -66,10 +66,10 @@ public class SandLab{
     //called when the user clicks on a location using the given tool
     private void locationClicked(int row, int col, int tool){
         grid[row][col] = tool;
-        //if (tool == RESET)
-        //{
-          //  grid = new int[MAX_ROWS][MAX_COLS];
-        //}
+        if (tool == RESET)
+        {
+            grid = new int[MAX_ROWS][MAX_COLS];
+        }
         if (tool == SAVEFILE) {
             SandLabFiles.writeFile(grid, NEW_FILE_NAME);  //uncomment this later to save your file...
         }
@@ -130,8 +130,8 @@ public class SandLab{
 
     public void fallingOver(int particle, int randomRow, int randomCol) {
         int getRandomDirection = IR4.getRandomNumber(-1, 1);
-        int my_max_row = 180;
-        int my_max_col = 150;
+        int my_max_row = MAX_ROWS - 1;
+        int my_max_col = MAX_COLS - 1;
         
         if(grid[randomRow][randomCol] == particle) { 
             grid[randomRow][randomCol] = EMPTY;
@@ -176,8 +176,8 @@ public class SandLab{
                                         currBtmLeft != DESTRUCTOR);
           
             if(grid[randomRow][randomCol] != METAL) {
-                System.out.println("Random Col: " + randomCol);
-                System.out.println("Random Row: " + randomRow);
+                //System.out.println("Random Col: " + randomCol);
+                //System.out.println("Random Row: " + randomRow);
                 if(isCurrBelowEmpty) {
                     grid[randomRow][randomCol] = currBelow;
                     grid[randomRow+1][randomCol] = SAND;
@@ -207,8 +207,8 @@ public class SandLab{
                 if(randomRow == 0) {
                     randomRow = my_max_row -1;
                 }
-                System.out.println("Random Col: " + randomCol);
-                System.out.println("Random Row: " + randomRow);
+                //System.out.println("Random Col: " + randomCol);
+                //System.out.println("Random Row: " + randomRow);
                 grid[randomRow][randomCol] = particle;
             }
         }
@@ -218,8 +218,8 @@ public class SandLab{
     
     // This function runs the and functionality where the user can draw water
     public void runWater(int randomRow, int randomCol, int getRandomDirection) {
-        int my_max_row = 180;
-        int my_max_col = 150;
+        int my_max_row = MAX_ROWS - 1;
+        int my_max_col = MAX_COLS - 1;
         // WATER TOOL
         if(grid[randomRow][randomCol] == WATER) {
             int randomRowDir = getRandomDirection == 0 ? 1 : 0;
@@ -288,7 +288,7 @@ public class SandLab{
             int randomRowDir = getRandomDirection == 0 ? 1 : 0;
             int randomColDir = getRandomDirection != 0 ? getRandomDirection : 0;
         
-            if (getRandomNumber(0,100) == 69) {
+            if (getRandomNumber(0,100) == 50) {
                 grid[randomRow][randomCol] = EMPTY;
                 return ;
             }
@@ -324,8 +324,8 @@ public class SandLab{
     
     // This function runs the and functionality where the user can draw oil
     public void runOil(int randomRow, int randomCol, int getRandomDirection) {
-        int my_max_col = 150;
-        int my_max_row = 180;
+        int my_max_col = MAX_ROWS - 1;
+        int my_max_row = MAX_COLS - 1;
         if(grid[randomRow][randomCol] == OIL) {
             int randomRowDir = getRandomDirection == 0 ? 1 : 0;
             int randomColDir = getRandomDirection != 0 ? getRandomDirection : 0;
@@ -369,8 +369,8 @@ public class SandLab{
 
 
     public void runFire(int randomRow, int randomCol, int getRandomDirection) {
-        int my_max_row = 180;
-        int my_max_col = 150;
+        int my_max_row = MAX_ROWS - 1;
+        int my_max_col = MAX_COLS - 1;
         if(grid[randomRow][randomCol] == FIRE) {
             int randomRowDir = getRandomDirection == 0 ? 1 : 0;
             int randomColDir = getRandomDirection != 0 ? getRandomDirection : 0;
